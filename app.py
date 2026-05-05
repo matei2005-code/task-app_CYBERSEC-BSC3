@@ -4,6 +4,7 @@ from models import db, User, Task
 from routes.auth_routes import auth_bp
 from routes.task_routes import task_bp
 from routes.admin_routes import admin_bp
+from werkzeug.security import generate_password_hash
 
 # Create Flask application
 app = Flask(__name__)
@@ -41,10 +42,22 @@ def create_tables():
         # Check if admin user exists, if not create one
         admin = User.query.filter_by(username='admin').first()
         if not admin:
-            admin = User(username='admin', password='admin123', is_admin=True)
+            admin = User(
+            username='admin',
+            password=generate_password_hash("ChangeThisPasswordImmediately"),
+            is_admin=True
+            )
             db.session.add(admin)
             db.session.commit()
 
 
 if __name__ == '__main__':
     app.run(debug=True)  # Debug mode enabled (intentionally insecure)
+
+# Adding Missing Security Headers
+@app.after_request
+def security_headers(response):
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Content-Security-Policy"] = "default-src 'self'"
+    return response
