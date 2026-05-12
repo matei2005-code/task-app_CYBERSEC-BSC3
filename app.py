@@ -59,6 +59,7 @@ if __name__ == '__main__':
 # Adding Missing Security Headers
 @app.after_request
 def security_headers(response):
+    response.headers["Server"] = "SecureServer"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["Content-Security-Policy"] = "default-src 'self'"
