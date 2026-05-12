@@ -10,6 +10,9 @@ from werkzeug.security import generate_password_hash
 # Create Flask application
 app = Flask(__name__)
 csrf = CSRFProtect(app)
+app.config.update(
+    SESSION_COOKIE_SAMESITE="Lax"
+)
 
 # Hardcoded secret key (intentionally insecure)
 app.secret_key = "super_secret_key_do_not_share"
