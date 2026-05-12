@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask_wtf.csrf import CSRFProtect
 import os
 from models import db, User, Task
 from routes.auth_routes import auth_bp
@@ -8,6 +9,7 @@ from werkzeug.security import generate_password_hash
 
 # Create Flask application
 app = Flask(__name__)
+csrf = CSRFProtect(app)
 
 # Hardcoded secret key (intentionally insecure)
 app.secret_key = "super_secret_key_do_not_share"
